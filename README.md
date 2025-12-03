@@ -26,3 +26,22 @@ This folder contains the code written by Alanis Zhao for the project.
     independent cascade with decay spreading process for positive/negative 
     nodes for all combinations of the given parameters. It produces the graphs 
     in the plots folder. 
+
+project_mandyh:
+This folder contains project code written by Mandy Hu
+
+    networks:
+    This folder contains the network models used within the project, 
+    downloaded from their datasets.
+
+    plots:
+    This folder contains all the graphs generated for the threshold model with
+    heterogeneous thresholds. The plots show the positive/ total tweet ratio 
+    as well as the total number of positive and negative nodes in each network 
+    for different parameter combinations.
+
+    threshold-model.py
+    This file contains the threshold model with heterogeneous thresholds 
+    implementation, and runs the spreading process with all three networks and
+    different parameter combinations. It produces graphs for each combination 
+    and saves them in the plots folder.
