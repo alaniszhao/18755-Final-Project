@@ -224,7 +224,7 @@ for p0_val in p0_vals:
                     plt.plot(range(len(avg_total_pos)), avg_total_neg, marker='o', label=f"{name} (neg)")
                 # plot
                 plt.xlabel("Timestep")
-                plt.ylabel("Total Positive/Negative Tweets")
+                plt.ylabel("Total Positive/Negative Nodes")
                 plt.title(f"p0={p0_val}, α={alpha_val}, seeds={starting_num}, error={error:.4f}")
                 plt.legend()
                 
