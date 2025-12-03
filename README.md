@@ -1,3 +1,5 @@
+This project contains multiple large files. We used Git LFS to manage them.
+
 project_aazhao:
 This folder contains the code written by Alanis Zhao for the project. 
 
