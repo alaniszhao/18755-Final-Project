@@ -45,3 +45,17 @@ This folder contains project code written by Mandy Hu
     implementation, and runs the spreading process with all three networks and
     different parameter combinations. It produces graphs for each combination 
     and saves them in the plots folder.
+
+project_choysal:
+This folder contains project code written by Charvi Hoysal
+
+    plots:
+    This folder contains all the graphs generated for the SIR Model with the given 
+    network files. The plots show the positive/ total tweet ratio as well as the 
+    total number of positive and negative nodes in each network for different 
+    parameters.
+
+    SIR.py
+    This file contains the SIR implementation, and runs the spreading process 
+    with all three networks and different parameter combinations. It produces 
+    graphs for each combination and saves them in the plots folder.
