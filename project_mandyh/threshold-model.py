@@ -114,7 +114,7 @@ def run_model(G, a, b, seed, influencer=False):
 
     # run the model multiple times to avoid bias
     for k in range(15):
-        
+
         # initialize random seed set
         if influencer:
             degree_dict = dict(G.degree())
@@ -234,7 +234,7 @@ if __name__ == "__main__":
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel("Tweet Positivity Ratio: total positive tweets / total tweets")
-        plt.title(f"α={a}, β={b}, seeds={seed}, error={round(mae_tweets, 4)}")
+        plt.title(f"α={a}, β={b}, seeds=influencer, error={round(mae_tweets, 4)}")
         plt.savefig(f"./plots/{a}-{b}-influencer-tweets.png", bbox_inches='tight', pad_inches=0.1)
         plt.show(block=False)
 
@@ -249,6 +249,6 @@ if __name__ == "__main__":
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel("Total Positive/Negative Nodes")
-        plt.title(f"α={a}, β={b}, seeds={50}")
+        plt.title(f"α={a}, β={b}, seeds=influencer")
         plt.savefig(f"./plots/{a}-{b}-influencer-nodes.png", bbox_inches='tight', pad_inches=0.1)
         plt.show(block=False)
