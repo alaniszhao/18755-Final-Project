@@ -60,4 +60,5 @@ This folder contains project code written by Charvi Hoysal
     SIR.py
     This file contains the SIR implementation, and runs the spreading process 
     with all three networks and different parameter combinations. It produces 
-    graphs for each combination and saves them in the plots folder.
+    graphs for each combination and saves them in the plots folder. Can be used by
+    running the script with python3
