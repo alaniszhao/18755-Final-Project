@@ -28,11 +28,6 @@ def threshold_cascade(G, positive, pos_thresholds, negative, neg_thresholds):
         new_pos = set(positive)
         new_neg = set(negative)
 
-        pos_tweet_history.append(pos_tweet_count)
-        neg_tweet_history.append(neg_tweet_count)
-        pos_node_history.append(len(positive))
-        neg_node_history.append(len(negative))
-
         # loop through all nodes
         for v in G.nodes():
 
@@ -66,7 +61,12 @@ def threshold_cascade(G, positive, pos_thresholds, negative, neg_thresholds):
 
         if (new_neg == negative) and (new_pos == positive):
             break
-
+        
+        pos_tweet_history.append(pos_tweet_count)
+        neg_tweet_history.append(neg_tweet_count)
+        pos_node_history.append(len(positive))
+        neg_node_history.append(len(negative))
+        
         positive = new_pos
         negative = new_neg
 
