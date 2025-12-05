@@ -1,5 +1,7 @@
 This project contains multiple large files. We used Git LFS to manage them.
 
+We used AI assistance for general guidance on how to use certain Python libraries, specifically NetworkX and matplotlib. This included clarifying function usage, typical workflows, and common patterns for graph processing and visualization. All core design decisions, implementation, and analysis were completed by us.
+
 project_aazhao:
 This folder contains the code written by Alanis Zhao for the project. 
 
