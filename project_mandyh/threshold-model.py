@@ -5,11 +5,11 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+# assigns threshold to all nodes in G based on given alpha and beta value
 def assign_heterogeneous_thresholds(G, alpha, beta):
     thresholds = {}
 
     for n in G.nodes():
-
         thresholds[n] = random.betavariate(alpha, beta)
 
     return thresholds
@@ -40,14 +40,16 @@ def threshold_cascade(G, positive, pos_thresholds, negative, neg_thresholds):
                 neg_tweet_count += 1
                 continue 
             
+            # find nodes that current node follows
             preds = list(G.successors(v))
             if not preds:
                 continue 
-
+            
+            # sum number of infected neighbors
             pos_neighbors = sum(1 for u in preds if u in positive)
             neg_neighbors = sum(1 for u in preds if u in negative)
 
-            # node is influenced by higher percentage of neighbors
+            # node is influenced by higher percentage of neighbors that have that sentiment
             if pos_neighbors > neg_neighbors or ((pos_neighbors == neg_neighbors) and (random.randint(0, 1) == 0)):
                 theta = pos_thresholds[v]
                 frac_active = pos_neighbors / len(preds)
@@ -59,9 +61,11 @@ def threshold_cascade(G, positive, pos_thresholds, negative, neg_thresholds):
                 if frac_active >= theta:
                     new_neg.add(v)
 
+        # end run when number of infected nodes converges
         if (new_neg == negative) and (new_pos == positive):
             break
         
+        # update information for this timestep
         pos_tweet_history.append(pos_tweet_count)
         neg_tweet_history.append(neg_tweet_count)
         pos_node_history.append(len(positive))
@@ -72,6 +76,7 @@ def threshold_cascade(G, positive, pos_thresholds, negative, neg_thresholds):
 
     return pos_tweet_history, pos_node_history, neg_tweet_history, neg_node_history
 
+# calculates ratio of positive tweets to all tweets
 def find_ratios(pos, neg):
     ratios = []
     time = max(len(pos), len(neg))
@@ -97,17 +102,19 @@ def pad_array(array, length):
 
 def run_model(G, a, b, seed, influencer=False):
 
-    
+    # assign heterogeneous thresholds to positive and negative nodes
     pos_thresholds = assign_heterogeneous_thresholds(G, a, b)
     neg_thresholds = assign_heterogeneous_thresholds(G, a, b)
 
+    # keep track of network information over multiple runs
     pos_tweet_counts = []
     neg_tweet_counts = []
     pos_node_count = []
     neg_node_count = []
 
+    # run the model multiple times to avoid bias
     for k in range(15):
-
+        
         # initialize random seed set
         if influencer:
             degree_dict = dict(G.degree())
@@ -133,17 +140,19 @@ def run_model(G, a, b, seed, influencer=False):
     assert(len(pos_tweets) == len(pos_nodes))
     t = max(len(run) for run in (pos_tweet_counts + neg_tweet_counts))
 
+    # calculates average over each 15 runs
     avg_pos_tweets = np.mean(np.array([pad_array(run, t) for run in pos_tweet_counts]), axis=0)
     avg_neg_tweets = np.mean(np.array([pad_array(run, t) for run in neg_tweet_counts]), axis=0)
     avg_pos_nodes = np.mean(np.array([pad_array(run, t) for run in pos_node_count]), axis=0)
     avg_neg_nodes = np.mean(np.array([pad_array(run, t) for run in neg_node_count]), axis=0)
 
+    # calculate ratio of positive tweets
     ratios = find_ratios(avg_pos_tweets, avg_neg_tweets)
 
     return ratios, avg_pos_nodes, avg_neg_nodes
 
+# calculates mean average error
 def mae(higgs, twitter, soc):
-
     higgs_mae = np.mean(np.abs(np.array(higgs) - ground_truth))
     twitter_mae = np.mean(np.abs(np.array(twitter) - ground_truth))
     soc_mae = np.mean(np.abs(np.array(soc) - ground_truth))
@@ -160,9 +169,12 @@ if __name__ == "__main__":
     data = mmread('./networks/soc-twitter-follows/soc-twitter-follows.mtx')
     soc = nx.DiGraph(data)
 
+    # set parameters for beta distribution
     parameters = [(2, 5), (2, 2), (5, 2)]
+    # set initial seed count
     seed_count = [2500, 7500]
 
+    # run model for all parameter and seed values
     for a, b in parameters:
         for seed in seed_count:
 
@@ -172,7 +184,7 @@ if __name__ == "__main__":
 
             time = range(max(len(higgs_ratio), len(twitter_ratio), len(soc_ratio)))
 
-            # plot tweets
+            # plot tweets for random selection networks
             mae_tweets = mae(higgs_ratio, twitter_ratio, soc_ratio)
             plt.figure(figsize=(8, 5))
             plt.fill_between(time, ground_truth, 0, color="red", alpha=0.2)
@@ -188,7 +200,7 @@ if __name__ == "__main__":
             plt.savefig(f"./plots/{a}-{b}-{seed}-tweets.png", bbox_inches='tight', pad_inches=0.1)
             plt.show(block=False)
 
-            # plot nodes
+            # plot nodes for random selection networks
             plt.figure(figsize=(8, 5))
             plt.plot(range(len(higgs_pos_nodes)), higgs_pos_nodes, marker='o', label='Higgs (pos)', color="blue")
             plt.plot(range(len(twitter_pos_nodes)), twitter_pos_nodes, marker='o', label='Twitter (pos)', color="orange")
@@ -203,14 +215,14 @@ if __name__ == "__main__":
             plt.savefig(f"./plots/{a}-{b}-{seed}-nodes.png", bbox_inches='tight', pad_inches=0.1)
             plt.show(block=False)
 
-        # plot influencer nodes
+        # run model for influencer nodes
         higgs_ratio, higgs_pos_nodes, higgs_neg_nodes = run_model(higgs, a, b, 50, influencer=True)
         twitter_ratio, twitter_pos_nodes, twitter_neg_nodes = run_model(twitter, a, b, 50, influencer=True)
         soc_ratio, soc_pos_nodes, soc_neg_nodes = run_model(soc, a, b, 50, influencer=True)
 
         time = range(max(len(higgs_ratio), len(twitter_ratio), len(soc_ratio)))
 
-        # plot tweets
+        # plot influencer tweets
         mae_tweets = mae(higgs_ratio, twitter_ratio, soc_ratio)
         plt.figure(figsize=(8, 5))
         plt.fill_between(time, ground_truth, 0, color="red", alpha=0.2)
@@ -226,7 +238,7 @@ if __name__ == "__main__":
         plt.savefig(f"./plots/{a}-{b}-influencer-tweets.png", bbox_inches='tight', pad_inches=0.1)
         plt.show(block=False)
 
-        # plot nodes
+        # plot influencer nodes
         plt.figure(figsize=(8, 5))
         plt.plot(range(len(higgs_pos_nodes)), higgs_pos_nodes, marker='o', label='Higgs (pos)', color="blue")
         plt.plot(range(len(twitter_pos_nodes)), twitter_pos_nodes, marker='o', label='Twitter (pos)', color="orange")
