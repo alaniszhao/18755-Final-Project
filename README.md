@@ -1,5 +1,7 @@
 This project contains multiple large files. We used Git LFS to manage them.
 
+We used AI assistance for general guidance on how to use certain Python libraries, specifically NetworkX and matplotlib. This included clarifying function usage, typical workflows, and common patterns for graph processing and visualization. All core design decisions, implementation, and analysis were completed by us.
+
 project_aazhao:
 This folder contains the code written by Alanis Zhao for the project. 
 
@@ -45,3 +47,17 @@ This folder contains project code written by Mandy Hu
     implementation, and runs the spreading process with all three networks and
     different parameter combinations. It produces graphs for each combination 
     and saves them in the plots folder.
+
+project_choysal:
+This folder contains project code written by Charvi Hoysal
+
+    plots:
+    This folder contains all the graphs generated for the SIR Model with the given 
+    network files. The plots show the positive/ total tweet ratio as well as the 
+    total number of positive and negative nodes in each network for different 
+    parameters.
+
+    SIR.py
+    This file contains the SIR implementation, and runs the spreading process 
+    with all three networks and different parameter combinations. It produces 
+    graphs for each combination and saves them in the plots folder.
